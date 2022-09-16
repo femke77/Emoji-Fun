@@ -5,10 +5,15 @@ const { replaceWordWithEmoji } = require("../lib/emoji");
 // router post with emoji converted words
 router.post("/post", async (req, res) => {
   try {
-    const body = replaceWordWithEmoji(req.body);
-    const newPost = await Post.create(body);
-
-    res.json(newPost);
+    if (req.body.replaceWithEmoji) {
+      const body = replaceWordWithEmoji(req.body);
+      const newPost = await Post.create(body);
+      res.json(newPost);
+    } else {
+      const newPost = await Post.create(req.body);
+      res.json(newPost);
+    }
+  
   } catch (err) {
     res.status(500).json(err.message);
   }
